@@ -16,7 +16,7 @@
         <Style x:Key="ToolbarButton" TargetType="Button">
             <Setter Property="FontFamily" Value="{DynamicResource AppFont}"/>
             <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Padding" Value="7,2"/>
             <Setter Property="Margin" Value="2"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
@@ -170,7 +170,7 @@
             <Border x:Name="ExplorerBorder" Grid.Column="0" Background="{DynamicResource SurfaceBrush}"
                     BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
                 <DockPanel>
-                    <Border DockPanel.Dock="Top" Padding="10,8" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1">
+                    <Border DockPanel.Dock="Top" Padding="8,4" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1">
                         <Grid>
                             <TextBlock Text="EXPLORADOR" FontSize="11" FontWeight="SemiBold"
                                        Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
@@ -185,7 +185,7 @@
                         </Grid>
                     </Border>
                     <TextBlock x:Name="ExplorerRootText" DockPanel.Dock="Top" Text="Sin carpeta abierta"
-                               TextTrimming="CharacterEllipsis" Padding="10,6" FontSize="11"
+                                TextTrimming="CharacterEllipsis" Padding="8,3" FontSize="11"
                                Foreground="{DynamicResource TextSecondaryBrush}"/>
                     <TreeView x:Name="ExplorerTree" BorderThickness="0" Background="Transparent"
                               Foreground="{DynamicResource TextPrimaryBrush}"
@@ -227,16 +227,16 @@
 
         <!-- Find/Replace Panel (hidden by default) -->
         <Border x:Name="FindPanel" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Right"
-                Margin="10" Padding="10" Background="{DynamicResource SurfaceBrush}"
+                Margin="8" Padding="8" Background="{DynamicResource SurfaceBrush}"
                 BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4"
                 Visibility="Collapsed" Panel.ZIndex="100">
             <StackPanel>
                 <TextBlock Text="Buscar:" FontSize="12" Margin="0,0,0,4"/>
-                <TextBox x:Name="FindTextBox" Width="200" FontSize="13" Padding="4" Margin="0,0,0,8"/>
+                <TextBox x:Name="FindTextBox" Width="200" FontSize="13" Padding="3" Margin="0,0,0,5"/>
                 <TextBlock Text="Reemplazar:" FontSize="12" Margin="0,0,0,4"/>
-                <TextBox x:Name="ReplaceTextBox" Width="200" FontSize="13" Padding="4" Margin="0,0,0,8"/>
+                <TextBox x:Name="ReplaceTextBox" Width="200" FontSize="13" Padding="3" Margin="0,0,0,5"/>
                 <TextBlock Text="Enter busca · Mayús+Enter reemplaza · Esc cierra"
-                           FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+                           FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="Buscar" Style="{DynamicResource ToolbarButton}" Click="FindNext_Click" Margin="0,0,4,0"/>
                     <Button Content="Reemplazar" Style="{DynamicResource ToolbarButton}" Click="Replace_Click" Margin="0,0,4,0"/>

@@ -348,30 +348,45 @@ public partial class MainWindow : Window
         try
         {
             var file = Path.Combine(AppContext.BaseDirectory, "Themes", "themes.json");
-            if (!File.Exists(file)) return;
-
-            var themes = JsonSerializer.Deserialize<List<ThemeDefinition>>(File.ReadAllText(file),
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+            var themes = File.Exists(file)
+                ? JsonSerializer.Deserialize<List<ThemeDefinition>>(File.ReadAllText(file),
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new()
+                : new List<ThemeDefinition>();
             _themes = themes.Where(IsValidTheme)
                 .GroupBy(t => t.Id, StringComparer.OrdinalIgnoreCase)
                 .Select(group => group.Last())
                 .ToDictionary(t => t.Id, StringComparer.OrdinalIgnoreCase);
-            ThemeMenu.Items.Clear();
-            foreach (var theme in _themes.Values.OrderBy(t => t.Name, StringComparer.CurrentCultureIgnoreCase))
-            {
-                ThemeMenu.Items.Add(new MenuItem
-                {
-                    Header = theme.Name,
-                    Tag = theme.Id,
-                    IsCheckable = true
-                });
-            }
-            foreach (MenuItem item in ThemeMenu.Items) item.Click += Theme_Click;
+            if (_themes.Count == 0) _themes["classic"] = new ThemeDefinition();
+            PopulateThemeMenu();
             if (_themes.TryGetValue("classic", out var classic)) ApplyTheme(classic);
         }
         catch (Exception ex)
         {
+            // La aplicación debe seguir siendo utilizable aunque el usuario haya
+            // editado el JSON y haya dejado una entrada inválida.
+            _themes.Clear();
+            _themes["classic"] = new ThemeDefinition();
+            PopulateThemeMenu();
+            ApplyTheme(_themes["classic"]);
             UpdateStatus($"No se pudieron cargar los temas: {ex.Message}");
+        }
+    }
+
+    private void PopulateThemeMenu()
+    {
+        ThemeMenu.Items.Clear();
+        foreach (var theme in _themes.Values.OrderBy(t => t.Name, StringComparer.CurrentCultureIgnoreCase))
+        {
+            var item = new MenuItem
+            {
+                Header = theme.Name,
+                Tag = theme.Id,
+                IsCheckable = true,
+                Padding = new Thickness(8, 2, 8, 2),
+                MinHeight = 0
+            };
+            item.Click += Theme_Click;
+            ThemeMenu.Items.Add(item);
         }
     }
 
