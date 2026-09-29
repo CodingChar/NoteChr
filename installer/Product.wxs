@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+
+  <Package Name="NoteChr"
+           Manufacturer="NoteChr"
+           Version="1.0.11.0"
+           UpgradeCode="7B3F2A11-9C4D-4E88-B1A6-2F5C8D3E9A47"
+           Scope="perMachine"
+           Compressed="yes"
+           InstallerVersion="500">
+
+    <SummaryInformation Description="NoteChr - editor de texto" />
+
+    <MajorUpgrade DowngradeErrorMessage="Ya hay una version mas reciente de NoteChr instalada." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- Sin instalacion prerequisites: la app es autocontenida -->
+    <!-- Windows Installer puede informar VersionNT=603 incluso en Windows 10.
+         La aplicación requiere Windows 10; aquí solo se comprueba la arquitectura. -->
+    <Launch Condition="VersionNT64" Message="NoteChr requiere Windows de 64 bits." />
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="terms.rtf" />
+    <ui:WixUI Id="WixUI_InstallDir" />
+
+    <Feature Id="Main" Title="NoteChr" Level="1" AllowAbsent="no">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentGroupRef Id="FileAssociations" />
+      <ComponentGroupRef Id="Shortcuts" />
+    </Feature>
+
+    <Feature Id="DesktopIcon" Title="Acceso directo en el escritorio" Level="2">
+      <ComponentGroupRef Id="DesktopShortcuts" />
+    </Feature>
+
+    <!-- Estructura de carpetas -->
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="NoteChr" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ShortcutFolder" Name="NoteChr" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder" />
+
+    <!-- ============================================ -->
+    <!-- ARCHIVOS DE LA APLICACION                  -->
+    <!-- ============================================ -->
+      <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
+
+      <Component Id="MainExecutable" Guid="*">
+        <File Id="NoteChrExe" Name="NoteChr.exe" Source="$(PublishDir)\NoteChr.exe" KeyPath="yes" />
+      </Component>
+      <Files Include="$(PublishDir)\Themes\**" />
+
+    </ComponentGroup>
+
+    <!-- ============================================ -->
+    <!-- ASOCIACIONES DE ARCHIVOS                    -->
+    <!-- Registra NoteChr en "Abrir con" para .txt   -->
+    <!-- y para todos los archivos de texto.        -->
+    <!-- ============================================ -->
+    <ComponentGroup Id="FileAssociations" Directory="INSTALLFOLDER">
+
+      <!-- Tipos de archivo que NoteChr puede abrir -->
+      <Component Id="TxtAssociation" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\.txt\OpenWithProgids">
+          <RegistryValue Name="NoteChr.TextFile" Type="string" Value="" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+      <Component Id="LogAssociation" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\.log\OpenWithProgids">
+          <RegistryValue Name="NoteChr.TextFile" Type="string" Value="" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+      <Component Id="IniAssociation" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\.ini\OpenWithProgids">
+          <RegistryValue Name="NoteChr.TextFile" Type="string" Value="" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+      <Component Id="CfgAssociation" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\.cfg\OpenWithProgids">
+          <RegistryValue Name="NoteChr.TextFile" Type="string" Value="" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+      <Component Id="MdAssociation" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\.md\OpenWithProgids">
+          <RegistryValue Name="NoteChr.TextFile" Type="string" Value="" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+      <Component Id="CsvAssociation" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\.csv\OpenWithProgids">
+          <RegistryValue Name="NoteChr.TextFile" Type="string" Value="" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+      <Component Id="JsonAssociation" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\.json\OpenWithProgids">
+          <RegistryValue Name="NoteChr.TextFile" Type="string" Value="" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+      <Component Id="XmlAssociation" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\.xml\OpenWithProgids">
+          <RegistryValue Name="NoteChr.TextFile" Type="string" Value="" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+      <Component Id="YamlAssociation" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\.yaml\OpenWithProgids">
+          <RegistryValue Name="NoteChr.TextFile" Type="string" Value="" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+      <Component Id="YmlAssociation" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\.yml\OpenWithProgids">
+          <RegistryValue Name="NoteChr.TextFile" Type="string" Value="" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+      <!-- Registro del ProgID: aqui se define como se abre y con que icono -->
+      <Component Id="ProgIdRegistration" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\NoteChr.TextFile">
+          <RegistryValue Type="string" Value="Documento de texto de NoteChr" />
+          <RegistryValue Name="FriendlyTypeName" Type="string" Value="Documento de texto de NoteChr" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKLM" Key="Software\Classes\NoteChr.TextFile\DefaultIcon">
+          <RegistryValue Type="string" Value="&quot;[INSTALLFOLDER]NoteChr.exe&quot;,0" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKLM" Key="Software\Classes\NoteChr.TextFile\shell\open\command">
+          <RegistryValue Type="string" Value="&quot;[INSTALLFOLDER]NoteChr.exe&quot; &quot;%1&quot;" />
+        </RegistryKey>
+
+        <!-- Permite elegir NoteChr en el menu "Abrir con" de Windows -->
+        <RegistryKey Root="HKLM" Key="Software\Classes\NoteChr.TextFile\SupportedTypes">
+          <RegistryValue Name=".txt" Type="string" Value="" />
+          <RegistryValue Name=".log" Type="string" Value="" />
+          <RegistryValue Name=".ini" Type="string" Value="" />
+          <RegistryValue Name=".cfg" Type="string" Value="" />
+          <RegistryValue Name=".md" Type="string" Value="" />
+          <RegistryValue Name=".csv" Type="string" Value="" />
+          <RegistryValue Name=".json" Type="string" Value="" />
+          <RegistryValue Name=".xml" Type="string" Value="" />
+          <RegistryValue Name=".yaml" Type="string" Value="" />
+          <RegistryValue Name=".yml" Type="string" Value="" />
+        </RegistryKey>
+      </Component>
+
+      <!-- Que Windows ofrezca NoteChr en "Abrir con" para todos los archivos -->
+      <Component Id="AllFilesOpenWith" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\Applications\NoteChr.exe">
+          <RegistryValue Type="string" Value="NoteChr" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKLM" Key="Software\Classes\Applications\NoteChr.exe\SupportedTypes">
+          <RegistryValue Name=".txt" Type="string" Value="" />
+          <RegistryValue Name=".log" Type="string" Value="" />
+          <RegistryValue Name=".ini" Type="string" Value="" />
+          <RegistryValue Name=".cfg" Type="string" Value="" />
+          <RegistryValue Name=".md" Type="string" Value="" />
+          <RegistryValue Name=".csv" Type="string" Value="" />
+          <RegistryValue Name=".json" Type="string" Value="" />
+          <RegistryValue Name=".xml" Type="string" Value="" />
+          <RegistryValue Name=".yaml" Type="string" Value="" />
+          <RegistryValue Name=".yml" Type="string" Value="" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKLM" Key="Software\Classes\Applications\NoteChr.exe\shell\open\command">
+          <RegistryValue Type="string" Value="&quot;[INSTALLFOLDER]NoteChr.exe&quot; &quot;%1&quot;" />
+        </RegistryKey>
+      </Component>
+
+      <!-- Menús contextuales de Windows: archivo y carpeta -->
+      <Component Id="ContextMenuFile" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\*\shell\NoteChr">
+          <RegistryValue Type="string" Value="Abrir archivo con NoteChr" />
+          <RegistryValue Name="Icon" Type="string" Value="[INSTALLFOLDER]NoteChr.exe" />
+        </RegistryKey>
+        <RegistryKey Root="HKLM" Key="Software\Classes\*\shell\NoteChr\command">
+          <RegistryValue Type="string" Value="&quot;[INSTALLFOLDER]NoteChr.exe&quot; &quot;%1&quot;" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+      <Component Id="ContextMenuDirectory" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Classes\Directory\shell\NoteChr">
+          <RegistryValue Type="string" Value="Abrir carpeta con NoteChr" />
+          <RegistryValue Name="Icon" Type="string" Value="[INSTALLFOLDER]NoteChr.exe" />
+        </RegistryKey>
+        <RegistryKey Root="HKLM" Key="Software\Classes\Directory\shell\NoteChr\command">
+          <RegistryValue Type="string" Value="&quot;[INSTALLFOLDER]NoteChr.exe&quot; &quot;%1&quot;" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+    </ComponentGroup>
+
+    <!-- ============================================ -->
+    <!-- ACCESOS DIRECTOS                            -->
+    <!-- ============================================ -->
+    <ComponentGroup Id="Shortcuts" Directory="ShortcutFolder">
+      <Component Id="StartMenuShortcut" Guid="*">
+        <Shortcut Id="StartMenuNoteChr"
+                  Name="NoteChr"
+                  Description="Editor de texto NoteChr"
+                  Target="[INSTALLFOLDER]NoteChr.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="RemoveShortcutFolder" Directory="ShortcutFolder" On="uninstall" />
+        <RegistryValue Root="HKLM" Key="Software\NoteChr" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+
+    <ComponentGroup Id="DesktopShortcuts" Directory="DesktopFolder">
+      <Component Id="DesktopShortcut" Guid="*">
+        <Shortcut Id="DesktopNoteChr"
+                  Name="NoteChr"
+                  Description="Editor de texto NoteChr"
+                  Target="[INSTALLFOLDER]NoteChr.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKLM" Key="Software\NoteChr" Name="desktop" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+
+  </Package>
+</Wix>

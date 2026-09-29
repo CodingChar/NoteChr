@@ -1,0 +1,94 @@
+<Application x:Class="NoteChr.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <!-- Modern color palette inspired by Windows 7 with modern touches -->
+            <SolidColorBrush x:Key="AccentBrush" Color="#0078D4"/>
+            <SolidColorBrush x:Key="AccentHoverBrush" Color="#1A86D9"/>
+            <SolidColorBrush x:Key="AccentPressedBrush" Color="#005A9E"/>
+            <SolidColorBrush x:Key="BackgroundBrush" Color="#F5F5F5"/>
+            <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
+            <SolidColorBrush x:Key="BorderBrush" Color="#E0E0E0"/>
+            <SolidColorBrush x:Key="TextPrimaryBrush" Color="#1A1A1A"/>
+            <SolidColorBrush x:Key="TextSecondaryBrush" Color="#666666"/>
+            <SolidColorBrush x:Key="TabBackgroundBrush" Color="#E8E8E8"/>
+            <SolidColorBrush x:Key="TabActiveBackgroundBrush" Color="#FFFFFF"/>
+            <SolidColorBrush x:Key="StatusBarBackgroundBrush" Color="#F0F0F0"/>
+            <SolidColorBrush x:Key="CompletionBackgroundBrush" Color="#FFFFFF"/>
+            <SolidColorBrush x:Key="CompletionHoverBrush" Color="#E5F3FF"/>
+            <SolidColorBrush x:Key="CompletionSelectedBrush" Color="#CCE8FF"/>
+            <SolidColorBrush x:Key="CompletionBorderBrush" Color="#0078D4"/>
+            <SolidColorBrush x:Key="MenuHoverBrush" Color="#E5F3FF"/>
+            <SolidColorBrush x:Key="MenuPressedBrush" Color="#CCE8FF"/>
+
+            <!-- Modern font -->
+            <FontFamily x:Key="AppFont">Segoe UI, Microsoft Sans Serif</FontFamily>
+
+            <!-- Menu item style -->
+            <Style x:Key="ModernMenuItem" TargetType="MenuItem">
+                <Setter Property="FontFamily" Value="{DynamicResource AppFont}"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Padding" Value="12,6"/>
+                <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+            </Style>
+
+            <!-- Tab item style -->
+            <Style x:Key="ModernTabItem" TargetType="TabItem">
+                <Setter Property="FontFamily" Value="{DynamicResource AppFont}"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Padding" Value="12,6"/>
+                <Setter Property="Background" Value="{DynamicResource TabBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabItem">
+                            <Border x:Name="Border" Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0"
+                                    CornerRadius="4,4,0,0" Margin="2,0,2,0">
+                                <ContentPresenter ContentSource="Header" Margin="{TemplateBinding Padding}"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource TabActiveBackgroundBrush}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource MenuHoverBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Completion list box item style -->
+            <Style x:Key="CompletionItem" TargetType="ListBoxItem">
+                <Setter Property="FontFamily" Value="{DynamicResource AppFont}"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Padding" Value="8,4"/>
+                <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border x:Name="Border" Background="Transparent" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource CompletionHoverBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource CompletionSelectedBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

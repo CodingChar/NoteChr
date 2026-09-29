@@ -1,0 +1,15 @@
+<Project Sdk="WixToolset.Sdk/5.0.2">
+
+  <PropertyGroup>
+    <OutputName>NoteChr</OutputName>
+    <OutputType>Package</OutputType>
+    <Platforms>x64</Platforms>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Configuracion regional para evitar advertencias de localizacion -->
+    <SuppressIces>ICE61</SuppressIces>
+  </PropertyGroup>
+
+</Project>
