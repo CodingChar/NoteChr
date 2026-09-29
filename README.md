@@ -1,5 +1,17 @@
 # NoteChr
 
+## Descargar e instalar
+
+**[Descargar NoteChr para Windows x64 (.msi)](https://github.com/CodingChar/NoteChr/releases/latest/download/NoteChr-Setup-x64.msi)**
+
+1. Descarga el instalador del enlace anterior.
+2. Abre el archivo con doble clic y sigue el asistente.
+3. Abre **NoteChr** desde el menú Inicio.
+
+No necesitas programar, compilar ni instalar .NET.
+Puedes consultar [todas las versiones](https://github.com/CodingChar/NoteChr/releases).
+El botón **Code → Download ZIP** descarga el código fuente, no el instalador.
+
 NoteChr es un editor de texto de escritorio para Windows, creado con C#,
 .NET 8 y WPF. Incluye pestañas, explorador de carpetas, autocompletado,
 temas visuales, búsqueda y reemplazo, zoom y detección de cambios en los
@@ -33,11 +45,11 @@ directorios abiertos.
 
 ## Instalación recomendada
 
-Descarga el instalador `NoteChr-1.0.12.0.msi` desde la sección **Releases**
+Descarga el instalador `NoteChr-Setup-x64.msi` desde la sección **Releases**
 de GitHub y ejecútalo. También puedes instalarlo desde PowerShell:
 
 ```powershell
-msiexec /i ".\installer\NoteChr-1.0.12.0.msi"
+msiexec /i ".\NoteChr-Setup-x64.msi"
 ```
 
 El instalador permite elegir la carpeta, crea un acceso directo en el menú
@@ -48,7 +60,7 @@ No cambia silenciosamente la aplicación predeterminada de tus extensiones.
 Para desinstalar:
 
 ```powershell
-msiexec /x ".\installer\NoteChr-1.0.12.0.msi"
+msiexec /x ".\NoteChr-Setup-x64.msi"
 ```
 
 El instalador muestra unos términos breves y no intrusivos: no hay telemetría,
@@ -112,7 +124,12 @@ esta estructura:
 }
 ```
 
-Después recompila para incluirlo en el MSI.
+Guarda el JSON y reinicia NoteChr: los temas aparecen sin recompilar.
+En instalaciones en Program Files, editar el archivo requiere permisos de administrador.
+Si falta el archivo, se utilizan los seis temas integrados como respaldo.
+
+Para desinstalar sin comandos, utiliza **Inicio → NoteChr → Desinstalar NoteChr**
+o **Configuración de Windows → Aplicaciones → NoteChr → Desinstalar**.
 
 ## Atajos
 

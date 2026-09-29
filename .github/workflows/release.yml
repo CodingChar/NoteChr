@@ -1,0 +1,43 @@
+name: Publicar instalador
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Validar version
+        shell: pwsh
+        run: |
+          $version = ([xml](Get-Content installer/Product.wxs -Raw)).Wix.Package.Version
+          if ($env:GITHUB_REF_NAME -ne "v$version") { throw 'La etiqueta no coincide con la version MSI.' }
+      - name: Instalar WiX
+        shell: pwsh
+        run: |
+          dotnet tool install --global wix --version 5.0.2
+          if ($LASTEXITCODE) { throw 'Fallo instalando WiX' }
+          wix extension add WixToolset.UI.wixext/5.0.2 --global
+          if ($LASTEXITCODE) { throw 'Fallo instalando WixUI' }
+      - name: Pruebas
+        shell: pwsh
+        run: ./tests/verify-release.ps1
+      - name: Crear MSI
+        shell: pwsh
+        run: ./installer/build-installer.ps1
+      - name: Publicar descarga
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = ([xml](Get-Content installer/Product.wxs -Raw)).Wix.Package.Version
+          Copy-Item "installer/NoteChr-$version.msi" NoteChr-Setup-x64.msi
+          $hash = (Get-FileHash NoteChr-Setup-x64.msi -Algorithm SHA256).Hash.ToLower()
+          "$hash  NoteChr-Setup-x64.msi" | Set-Content SHA256SUMS.txt -Encoding ascii
+          gh release create "v$version" NoteChr-Setup-x64.msi SHA256SUMS.txt --title "NoteChr $version" --notes "Descarga NoteChr-Setup-x64.msi y abrelo con doble clic. Windows x64; no requiere instalar .NET."
+          if ($LASTEXITCODE) { throw 'No se pudo publicar la release' }

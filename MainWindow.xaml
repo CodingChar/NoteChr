@@ -8,6 +8,7 @@
         MinHeight="400" MinWidth="600"
         FontFamily="{DynamicResource AppFont}"
         Background="{DynamicResource BackgroundBrush}"
+        Foreground="{DynamicResource TextPrimaryBrush}"
         Closing="MainWindow_Closing"
         WindowStartupLocation="CenterScreen">
 
@@ -88,6 +89,9 @@
 
         <!-- Menu Bar -->
         <Menu x:Name="MainMenu" Grid.Row="0" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1">
+            <Menu.Resources>
+                <Style TargetType="Separator" BasedOn="{StaticResource MenuSeparator}"/>
+            </Menu.Resources>
             <MenuItem Header="Archivo" Style="{DynamicResource ModernMenuItem}">
                 <MenuItem Header="Nuevo" InputGestureText="Ctrl+N" Click="NewFile_Click"/>
                 <MenuItem Header="Abrir..." InputGestureText="Ctrl+O" Click="OpenFile_Click"/>
@@ -230,6 +234,15 @@
                 Margin="8" Padding="8" Background="{DynamicResource SurfaceBrush}"
                 BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4"
                 Visibility="Collapsed" Panel.ZIndex="100">
+            <Border.Resources>
+                <Style TargetType="TextBox">
+                    <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                    <Setter Property="CaretBrush" Value="{DynamicResource AccentBrush}"/>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource CompletionSelectedBrush}"/>
+                </Style>
+            </Border.Resources>
             <StackPanel>
                 <TextBlock Text="Buscar:" FontSize="12" Margin="0,0,0,4"/>
                 <TextBox x:Name="FindTextBox" Width="200" FontSize="13" Padding="3" Margin="0,0,0,5"/>

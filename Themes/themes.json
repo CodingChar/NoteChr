@@ -7,51 +7,51 @@
     "AccentHover": "#1A86D9", "AccentPressed": "#005A9E", "Selection": "#CCE8FF",
     "MenuHover": "#E5F3FF", "MenuPressed": "#CCE8FF", "TabBackground": "#E8E8E8",
     "TabActive": "#FFFFFF", "StatusBar": "#F0F0F0", "EditorBackground": "#FFFFFF",
-    "EditorForeground": "#1A1A1A", "LineNumber": "#999999", "Caret": "#0078D4"
+    "EditorForeground": "#1A1A1A", "LineNumber": "#666666", "Caret": "#0078D4"
   },
   {
     "Id": "dark-modern", "Name": "Dark Modern",
     "Background": "#1E1E2E", "Surface": "#181825", "Border": "#313244",
-    "TextPrimary": "#CDD6F4", "TextSecondary": "#6C7086", "Accent": "#CBA6F7",
+    "TextPrimary": "#CDD6F4", "TextSecondary": "#BAC2DE", "Accent": "#CBA6F7",
     "AccentHover": "#D8B4FE", "AccentPressed": "#A580D8", "Selection": "#45475A",
     "MenuHover": "#2B2B3D", "MenuPressed": "#45475A", "TabBackground": "#181825",
     "TabActive": "#1E1E2E", "StatusBar": "#181825", "EditorBackground": "#1E1E2E",
-    "EditorForeground": "#CDD6F4", "LineNumber": "#6C7086", "Caret": "#89B4FA"
+    "EditorForeground": "#CDD6F4", "LineNumber": "#A6ADC8", "Caret": "#89B4FA"
   },
   {
     "Id": "warm-cozy", "Name": "Warm & Cozy",
     "Background": "#282828", "Surface": "#1D2021", "Border": "#504945",
-    "TextPrimary": "#EBDBB2", "TextSecondary": "#928374", "Accent": "#FABD2F",
+    "TextPrimary": "#EBDBB2", "TextSecondary": "#D0C0AC", "Accent": "#FABD2F",
     "AccentHover": "#FFD75F", "AccentPressed": "#D79921", "Selection": "#504945",
     "MenuHover": "#3C3836", "MenuPressed": "#504945", "TabBackground": "#1D2021",
     "TabActive": "#282828", "StatusBar": "#1D2021", "EditorBackground": "#282828",
-    "EditorForeground": "#EBDBB2", "LineNumber": "#928374", "Caret": "#FABD2F"
+    "EditorForeground": "#EBDBB2", "LineNumber": "#C3B39F", "Caret": "#FABD2F"
   },
   {
     "Id": "synthwave", "Name": "Synthwave / Cyberpunk",
     "Background": "#0F0E17", "Surface": "#171522", "Border": "#3B2D54",
-    "TextPrimary": "#FFFFFE", "TextSecondary": "#6246EA", "Accent": "#FF007F",
+    "TextPrimary": "#FFFFFE", "TextSecondary": "#B1A4E8", "Accent": "#FF007F",
     "AccentHover": "#FF4DA6", "AccentPressed": "#C90063", "Selection": "#3B2D54",
     "MenuHover": "#1B1A29", "MenuPressed": "#3B2D54", "TabBackground": "#171522",
     "TabActive": "#0F0E17", "StatusBar": "#171522", "EditorBackground": "#0F0E17",
-    "EditorForeground": "#FFFFFE", "LineNumber": "#6246EA", "Caret": "#00F0FF"
+    "EditorForeground": "#FFFFFE", "LineNumber": "#B1A4E8", "Caret": "#00F0FF"
   },
   {
     "Id": "minimal-paper", "Name": "Minimalist Paper",
     "Background": "#F5F2EB", "Surface": "#FBFAF6", "Border": "#D8D2C4",
-    "TextPrimary": "#2B2C2C", "TextSecondary": "#8D99AE", "Accent": "#005F73",
+    "TextPrimary": "#2B2C2C", "TextSecondary": "#555F6F", "Accent": "#005F73",
     "AccentHover": "#0A788F", "AccentPressed": "#003F4D", "Selection": "#D6E4F0",
     "MenuHover": "#E8E4D9", "MenuPressed": "#D6E4F0", "TabBackground": "#E8E4D9",
     "TabActive": "#F5F2EB", "StatusBar": "#E8E4D9", "EditorBackground": "#F5F2EB",
-    "EditorForeground": "#2B2C2C", "LineNumber": "#8D99AE", "Caret": "#005F73"
+    "EditorForeground": "#2B2C2C", "LineNumber": "#626C7C", "Caret": "#005F73"
   },
   {
     "Id": "pure-oled", "Name": "Pure OLED Dark",
     "Background": "#000000", "Surface": "#080808", "Border": "#242424",
-    "TextPrimary": "#E0E0E0", "TextSecondary": "#546E7A", "Accent": "#82AAFF",
+    "TextPrimary": "#E0E0E0", "TextSecondary": "#90A4AE", "Accent": "#82AAFF",
     "AccentHover": "#A5C4FF", "AccentPressed": "#5277C7", "Selection": "#1A2B3C",
     "MenuHover": "#121212", "MenuPressed": "#1A2B3C", "TabBackground": "#080808",
     "TabActive": "#000000", "StatusBar": "#080808", "EditorBackground": "#000000",
-    "EditorForeground": "#E0E0E0", "LineNumber": "#546E7A", "Caret": "#FFCB6B"
+    "EditorForeground": "#E0E0E0", "LineNumber": "#90A4AE", "Caret": "#FFCB6B"
   }
 ]

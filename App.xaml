@@ -31,6 +31,119 @@
                 <Setter Property="FontSize" Value="13"/>
                 <Setter Property="Padding" Value="8,2"/>
                 <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="MenuItem">
+                            <Grid>
+                                <Border x:Name="Row" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" CornerRadius="3">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition x:Name="CheckColumn" Width="20"/>
+                                            <ColumnDefinition Width="Auto" SharedSizeGroup="MenuHeader"/>
+                                            <ColumnDefinition Width="Auto" SharedSizeGroup="MenuGesture"/>
+                                            <ColumnDefinition x:Name="ArrowColumn" Width="16"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock x:Name="Check" Text="✓" Visibility="Hidden" VerticalAlignment="Center" Foreground="{DynamicResource AccentBrush}"/>
+                                        <ContentPresenter Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" VerticalAlignment="Center"/>
+                                        <TextBlock x:Name="Gesture" Grid.Column="2" Text="{TemplateBinding InputGestureText}" Margin="24,0,4,0" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                        <TextBlock x:Name="Arrow" Grid.Column="3" Text="›" Visibility="Hidden" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                                <Popup x:Name="PART_Popup" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Placement="Right" PlacementTarget="{Binding ElementName=Row}" AllowsTransparency="True" Focusable="False" PopupAnimation="Fade">
+                                    <Border x:Name="SubmenuSurface" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="4">
+                                        <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                            <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Cycle" KeyboardNavigation.TabNavigation="Cycle" Grid.IsSharedSizeScope="True"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsHighlighted" Value="True">
+                                    <Setter TargetName="Row" Property="Background" Value="{DynamicResource MenuHoverBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsSubmenuOpen" Value="True">
+                                    <Setter TargetName="Row" Property="Background" Value="{DynamicResource MenuPressedBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="Check" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="True">
+                                    <Setter TargetName="Arrow" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                                <Trigger Property="Role" Value="TopLevelHeader">
+                                    <Setter TargetName="PART_Popup" Property="Placement" Value="Bottom"/>
+                                    <Setter TargetName="CheckColumn" Property="Width" Value="0"/>
+                                    <Setter TargetName="ArrowColumn" Property="Width" Value="0"/>
+                                    <Setter TargetName="Gesture" Property="Visibility" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="Row" Property="Opacity" Value="0.5"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="MenuItem" BasedOn="{StaticResource ModernMenuItem}"/>
+            <Style TargetType="TreeViewItem">
+                <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TreeViewItem">
+                            <StackPanel>
+                                <Border x:Name="TreeRow" Background="{TemplateBinding Background}" Padding="2,1" CornerRadius="2">
+                                    <DockPanel>
+                                        <ToggleButton x:Name="Expander" DockPanel.Dock="Left" Width="16" Height="18" Focusable="False"
+                                                      IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
+                                            <ToggleButton.Template>
+                                                <ControlTemplate TargetType="ToggleButton">
+                                                    <Border Background="Transparent">
+                                                        <TextBlock x:Name="Glyph" Text="›" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsChecked" Value="True">
+                                                            <Setter TargetName="Glyph" Property="Text" Value="⌄"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </ToggleButton.Template>
+                                        </ToggleButton>
+                                        <ContentPresenter x:Name="PART_Header" ContentSource="Header" VerticalAlignment="Center"/>
+                                    </DockPanel>
+                                </Border>
+                                <ItemsPresenter x:Name="Children" Margin="16,0,0,0"/>
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="HasItems" Value="False">
+                                    <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
+                                </Trigger>
+                                <Trigger Property="IsExpanded" Value="False">
+                                    <Setter TargetName="Children" Property="Visibility" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger SourceName="TreeRow" Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="TreeRow" Property="Background" Value="{DynamicResource MenuHoverBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="TreeRow" Property="Background" Value="{DynamicResource CompletionSelectedBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="Separator" x:Key="MenuSeparator">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Separator">
+                            <Border Height="1" Margin="8,3" Background="{DynamicResource BorderBrush}"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
 
             <!-- Tab item style -->

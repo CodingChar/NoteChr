@@ -215,15 +215,16 @@ public partial class MainWindow : Window
         headerPanel.Children.Add(titleBlock);
         if (!string.IsNullOrEmpty(path))
         {
-            headerPanel.Children.Add(new TextBlock
+            var pathBlock = new TextBlock
             {
                 Text = SummarizeDirectory(path),
                 ToolTip = path,
                 FontSize = 10,
-                Foreground = Brushes.Gray,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 1, 4, 0)
-            });
+            };
+            pathBlock.SetResourceReference(TextBlock.ForegroundProperty, "TextSecondaryBrush");
+            headerPanel.Children.Add(pathBlock);
         }
         headerPanel.Children.Add(closeButton);
 
@@ -348,10 +349,12 @@ public partial class MainWindow : Window
         try
         {
             var file = Path.Combine(AppContext.BaseDirectory, "Themes", "themes.json");
-            var themes = File.Exists(file)
-                ? JsonSerializer.Deserialize<List<ThemeDefinition>>(File.ReadAllText(file),
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new()
-                : new List<ThemeDefinition>();
+            // Compatibilidad con los MSI anteriores que aplanaban la carpeta Themes.
+            if (!File.Exists(file)) file = Path.Combine(AppContext.BaseDirectory, "themes.json");
+            using var stream = File.Exists(file) ? File.OpenRead(file) :
+                typeof(MainWindow).Assembly.GetManifestResourceStream("NoteChr.DefaultThemes.json")!;
+            var themes = JsonSerializer.Deserialize<List<ThemeDefinition>>(stream,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
             _themes = themes.Where(IsValidTheme)
                 .GroupBy(t => t.Id, StringComparer.OrdinalIgnoreCase)
                 .Select(group => group.Last())
@@ -404,7 +407,7 @@ public partial class MainWindow : Window
         SetBrush(resources, "AccentPressedBrush", theme.AccentPressed);
         SetBrush(resources, "CompletionSelectedBrush", theme.Selection);
         SetBrush(resources, "MenuHoverBrush", theme.MenuHover);
-        SetBrush(resources, "MenuPressedBrush", theme.Selection);
+        SetBrush(resources, "MenuPressedBrush", theme.MenuPressed);
         SetBrush(resources, "TabBackgroundBrush", theme.TabBackground);
         SetBrush(resources, "TabActiveBackgroundBrush", theme.TabActive);
         SetBrush(resources, "StatusBarBackgroundBrush", theme.StatusBar);
@@ -445,12 +448,7 @@ public partial class MainWindow : Window
         FindPanel.Background = Brush(theme.Surface);
         FindPanel.BorderBrush = Brush(theme.Border);
 
-        foreach (var tab in MainTabControl.Items.OfType<TabItem>())
-        {
-            tab.Background = Brush(theme.TabBackground);
-            tab.BorderBrush = Brush(theme.Border);
-            tab.Foreground = Brush(theme.TextPrimary);
-        }
+        // Las pestañas conservan sus recursos dinámicos y los triggers de selección.
 
         foreach (MenuItem item in ThemeMenu.Items)
             item.IsChecked = string.Equals(item.Tag as string, theme.Id, StringComparison.OrdinalIgnoreCase);
@@ -584,7 +582,7 @@ public partial class MainWindow : Window
         try
         {
             foreach (var child in directory.EnumerateDirectories()
-                         .Where(d => !d.Attributes.HasFlag(FileAttributes.Hidden) && !d.Attributes.HasFlag(FileAttributes.System))
+                          .Where(d => (d.Attributes & (FileAttributes.Hidden | FileAttributes.System | FileAttributes.ReparsePoint)) == 0)
                          .OrderBy(d => d.Name, StringComparer.OrdinalIgnoreCase))
                 node.Items.Add(CreateDirectoryNode(child, false));
 

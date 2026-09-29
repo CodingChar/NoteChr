@@ -10,6 +10,8 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="tests\**\*.cs" />
+    <EmbeddedResource Include="Themes\themes.json" LogicalName="NoteChr.DefaultThemes.json" />
     <Content Include="Themes\themes.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Always" />
   </ItemGroup>
 </Project>

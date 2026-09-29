@@ -4,6 +4,9 @@ Set-Location $root
 
 Write-Host '==> Compilando Release'
 dotnet build NoteChr.csproj -c Release -v q --nologo
+if ($LASTEXITCODE -ne 0) { throw 'La compilacion Release fallo.' }
+dotnet run --project tests/Regression/Regression.csproj -c Release
+if ($LASTEXITCODE -ne 0) { throw 'Las pruebas funcionales fallaron.' }
 
 Write-Host '==> Validando temas JSON'
 $themeFile = Join-Path $root 'Themes\themes.json'
