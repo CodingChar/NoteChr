@@ -44,6 +44,12 @@
             </Setter>
         </Style>
 
+        <!-- Aplica el tema también a los submenús, que no heredan el estilo con clave. -->
+        <Style TargetType="MenuItem" BasedOn="{StaticResource ModernMenuItem}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+        </Style>
+
         <!-- Close tab button style -->
         <Style x:Key="CloseTabButton" TargetType="Button">
             <Setter Property="Width" Value="16"/>
@@ -113,14 +119,7 @@
                 <MenuItem Header="Zoom -" InputGestureText="Ctrl+-" Click="ZoomOut_Click"/>
                 <MenuItem Header="Restablecer zoom" InputGestureText="Ctrl+0" Click="ZoomReset_Click"/>
                 <Separator/>
-                <MenuItem Header="Tema">
-                    <MenuItem Header="Clásico NoteChr" Tag="classic" Click="Theme_Click"/>
-                    <MenuItem Header="Dark Modern" Tag="dark-modern" Click="Theme_Click"/>
-                    <MenuItem Header="Warm &amp; Cozy" Tag="warm-cozy" Click="Theme_Click"/>
-                    <MenuItem Header="Synthwave / Cyberpunk" Tag="synthwave" Click="Theme_Click"/>
-                    <MenuItem Header="Minimalist Paper" Tag="minimal-paper" Click="Theme_Click"/>
-                    <MenuItem Header="Pure OLED Dark" Tag="pure-oled" Click="Theme_Click"/>
-                </MenuItem>
+                <MenuItem x:Name="ThemeMenu" Header="Tema"/>
             </MenuItem>
             <MenuItem Header="Ayuda" Style="{DynamicResource ModernMenuItem}">
                 <MenuItem Header="Atajos de teclado" InputGestureText="F1" Click="Help_Click"/>

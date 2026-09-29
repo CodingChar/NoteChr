@@ -4,7 +4,7 @@
 
   <Package Name="NoteChr"
            Manufacturer="NoteChr"
-           Version="1.0.11.0"
+           Version="1.0.12.0"
            UpgradeCode="7B3F2A11-9C4D-4E88-B1A6-2F5C8D3E9A47"
            Scope="perMachine"
            Compressed="yes"
@@ -212,6 +212,12 @@
                   Description="Editor de texto NoteChr"
                   Target="[INSTALLFOLDER]NoteChr.exe"
                   WorkingDirectory="INSTALLFOLDER" />
+        <Shortcut Id="StartMenuUninstallNoteChr"
+                  Name="Desinstalar NoteChr"
+                  Description="Quitar NoteChr del equipo"
+                  Target="[SystemFolder]msiexec.exe"
+                  Arguments="/x [ProductCode]"
+                  WorkingDirectory="SystemFolder" />
         <RemoveFolder Id="RemoveShortcutFolder" Directory="ShortcutFolder" On="uninstall" />
         <RegistryValue Root="HKLM" Key="Software\NoteChr" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>

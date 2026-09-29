@@ -33,11 +33,11 @@ directorios abiertos.
 
 ## Instalación recomendada
 
-Descarga el instalador `NoteChr-1.0.11.0.msi` desde la sección **Releases**
+Descarga el instalador `NoteChr-1.0.12.0.msi` desde la sección **Releases**
 de GitHub y ejecútalo. También puedes instalarlo desde PowerShell:
 
 ```powershell
-msiexec /i ".\installer\NoteChr-1.0.11.0.msi"
+msiexec /i ".\installer\NoteChr-1.0.12.0.msi"
 ```
 
 El instalador permite elegir la carpeta, crea un acceso directo en el menú
@@ -48,7 +48,7 @@ No cambia silenciosamente la aplicación predeterminada de tus extensiones.
 Para desinstalar:
 
 ```powershell
-msiexec /x ".\installer\NoteChr-1.0.11.0.msi"
+msiexec /x ".\installer\NoteChr-1.0.12.0.msi"
 ```
 
 El instalador muestra unos términos breves y no intrusivos: no hay telemetría,

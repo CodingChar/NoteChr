@@ -290,46 +290,47 @@ public partial class MainWindow : Window
     /// <summary>Selector de carpetas nativo de Windows, sin cargar Windows Forms.</summary>
     private string? SelectFolder()
     {
-        var displayName = new StringBuilder(260);
+        var displayName = Marshal.AllocCoTaskMem(260 * 2);
         var info = new BrowseInfo
         {
             Owner = new WindowInteropHelper(this).Handle,
             Title = "Selecciona una carpeta para explorar",
             DisplayName = displayName,
-            Flags = 0x0001 | 0x0040 // BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE
+            Flags = 0x0001 | 0x0040 | 0x0050 // FSDIRS | NEWDIALOGSTYLE | USENEWUI
         };
-
-        var item = BrowseForFolder(ref info);
-        if (item == IntPtr.Zero) return null;
 
         try
         {
-            var path = new StringBuilder(32768);
-            return GetPathFromIdList(item, path) ? path.ToString() : null;
+            var item = BrowseForFolder(ref info);
+            if (item == IntPtr.Zero) return null;
+
+            try
+            {
+                var path = new StringBuilder(32768);
+                return GetPathFromIdList(item, path) ? path.ToString() : null;
+            }
+            finally { Marshal.FreeCoTaskMem(item); }
         }
-        finally { FreeCoTaskMem(item); }
+        finally { Marshal.FreeCoTaskMem(displayName); }
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     private struct BrowseInfo
     {
         public IntPtr Owner, Root;
-        public StringBuilder DisplayName;
+        public IntPtr DisplayName;
         public string Title;
         public uint Flags;
         public IntPtr Callback, Param;
         public int Image;
     }
 
-    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+    [DllImport("shell32.dll", EntryPoint = "SHBrowseForFolderW", CharSet = CharSet.Unicode)]
     private static extern IntPtr BrowseForFolder(ref BrowseInfo info);
 
-    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+    [DllImport("shell32.dll", EntryPoint = "SHGetPathFromIDListW", CharSet = CharSet.Unicode)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GetPathFromIdList(IntPtr item, StringBuilder path);
-
-    [DllImport("ole32.dll")]
-    private static extern void FreeCoTaskMem(IntPtr item);
 
     private void RefreshExplorer_Click(object sender, RoutedEventArgs e)
     {
@@ -349,9 +350,23 @@ public partial class MainWindow : Window
             var file = Path.Combine(AppContext.BaseDirectory, "Themes", "themes.json");
             if (!File.Exists(file)) return;
 
-            var themes = JsonSerializer.Deserialize<List<ThemeDefinition>>(File.ReadAllText(file)) ?? new();
-            _themes = themes.Where(t => !string.IsNullOrWhiteSpace(t.Id))
+            var themes = JsonSerializer.Deserialize<List<ThemeDefinition>>(File.ReadAllText(file),
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+            _themes = themes.Where(IsValidTheme)
+                .GroupBy(t => t.Id, StringComparer.OrdinalIgnoreCase)
+                .Select(group => group.Last())
                 .ToDictionary(t => t.Id, StringComparer.OrdinalIgnoreCase);
+            ThemeMenu.Items.Clear();
+            foreach (var theme in _themes.Values.OrderBy(t => t.Name, StringComparer.CurrentCultureIgnoreCase))
+            {
+                ThemeMenu.Items.Add(new MenuItem
+                {
+                    Header = theme.Name,
+                    Tag = theme.Id,
+                    IsCheckable = true
+                });
+            }
+            foreach (MenuItem item in ThemeMenu.Items) item.Click += Theme_Click;
             if (_themes.TryGetValue("classic", out var classic)) ApplyTheme(classic);
         }
         catch (Exception ex)
@@ -422,6 +437,9 @@ public partial class MainWindow : Window
             tab.Foreground = Brush(theme.TextPrimary);
         }
 
+        foreach (MenuItem item in ThemeMenu.Items)
+            item.IsChecked = string.Equals(item.Tag as string, theme.Id, StringComparison.OrdinalIgnoreCase);
+
         UpdateStatus($"Tema: {theme.Name}");
     }
 
@@ -432,6 +450,22 @@ public partial class MainWindow : Window
 
     private static SolidColorBrush Brush(string value) =>
         new((Color)ColorConverter.ConvertFromString(value)!);
+
+    private static bool IsValidTheme(ThemeDefinition theme)
+    {
+        if (string.IsNullOrWhiteSpace(theme.Id) || string.IsNullOrWhiteSpace(theme.Name)) return false;
+        var colors = new[]
+        {
+            theme.Background, theme.Surface, theme.Border, theme.TextPrimary,
+            theme.TextSecondary, theme.Accent, theme.AccentHover, theme.AccentPressed,
+            theme.Selection, theme.MenuHover, theme.MenuPressed, theme.TabBackground,
+            theme.TabActive, theme.StatusBar, theme.EditorBackground, theme.EditorForeground,
+            theme.LineNumber, theme.Caret
+        };
+        return colors.All(value => !string.IsNullOrWhiteSpace(value) &&
+            value.StartsWith('#') && (value.Length == 7 || value.Length == 9) &&
+            value.Skip(1).All(Uri.IsHexDigit));
+    }
 
     private void ToggleExplorer_Click(object sender, RoutedEventArgs e) => ToggleExplorer();
 
